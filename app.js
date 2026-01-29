@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_fix_ui',
+                    title: 'Corrigir UI SaaS Hunter e Add Briefing',
+                    description: 'Consertar modal quebrando o layout inicial e adicionar campo de texto longo (Briefing) com popup de leitura.',
+                    status: 'progress',
+                    priority: 'urgent',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando diagnóstico do CSS quebrado', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'CSS corrigido (Modal Overlay) e Briefing adicionado', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_search_first_saas',
                     title: 'Pesquisar Primeiro SaaS (MVP)',
                     description: 'Realizar busca de 1 SaaS com receita comprovada (>$5k MRR) usando a API do Brave e metodologia Hunter. Cadastrar no painel.',
