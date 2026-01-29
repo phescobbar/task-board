@@ -845,6 +845,78 @@ body {
 ::-webkit-scrollbar-thumb { background: var(--bg-tertiary); border-radius: 3px; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
+/* ===== Global Footer Hub ===== */
+.global-footer {
+    padding: 2rem 0;
+    text-align: center;
+    border-top: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    margin-top: auto;
+}
+
+.footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    text-decoration: none;
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all var(--transition-normal);
+}
+
+.footer-link svg {
+    width: 20px;
+    height: 20px;
+    transition: transform var(--transition-fast);
+}
+
+.footer-link:hover {
+    transform: translateY(-3px);
+    color: var(--text-primary);
+    border-color: var(--border-glow);
+    box-shadow: var(--shadow-md);
+}
+
+.footer-link:hover svg {
+    transform: scale(1.1);
+}
+
+.footer-link.story-lab:hover {
+    border-color: rgba(99, 102, 241, 0.5); /* Indigo for Story Lab */
+    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.2);
+}
+
+.footer-link.story-lab:hover svg {
+    color: #6366f1;
+}
+
+.footer-link.saas-hunter:hover {
+    border-color: rgba(56, 189, 248, 0.5); /* Sky Blue for SaaS Hunter */
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.2);
+}
+
+.footer-link.saas-hunter:hover svg {
+    color: #38bdf8;
+}
+
+.footer-copy {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    font-family: var(--font-mono);
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
     .header { padding: 0 1rem; }

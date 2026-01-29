@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_hub_navigation',
+                    title: 'Criar Navegação Global no Rodapé',
+                    description: 'Adicionar links elegantes para Story Lab e SaaS Hunter no rodapé do Task Board, criando um hub central.',
+                    status: 'progress',
+                    priority: 'medium',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando implementação do rodapé global', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Rodapé adicionado com links para Story Lab e SaaS Hunter', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_script_heranca',
                     title: 'Roteiro: A Herança do Cachorro',
                     description: 'Escrever roteiro completo baseado no Plot 2 (Ganância/Arrependimento). Salvar no Story Lab.',
