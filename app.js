@@ -20,7 +20,77 @@ class TaskBoard {
     loadData() {
         const savedTasks = localStorage.getItem('taskboard_tasks');
         const savedErrors = localStorage.getItem('taskboard_errors');
-        this.tasks = savedTasks ? JSON.parse(savedTasks) : [];
+        
+        if (savedTasks) {
+            this.tasks = JSON.parse(savedTasks);
+        } else {
+            // Initial Data Population
+            this.tasks = [
+                {
+                    id: 'task_init_1',
+                    title: 'Configurar Clawdbot como Serviço',
+                    description: 'Configurar systemd para rodar o gateway em background e habilitar linger.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando configuração do systemd', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Concluído: Serviço ativo e rodando', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'task_init_2',
+                    title: 'Criar Story Lab',
+                    description: 'Desenvolver painel web para gestão de roteiros de Shorts/Reels com integração GitHub.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'stories',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando criação dos arquivos do projeto', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Concluído: Deploy no GitHub Pages realizado', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'task_init_3',
+                    title: 'Criar Task Board',
+                    description: 'Desenvolver painel Kanban para gestão de tarefas com log de execução e painel de erros.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando desenvolvimento do Kanban', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Concluído: Deploy no GitHub Pages realizado', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'task_init_4',
+                    title: 'Arte da Agenda Semanal',
+                    description: 'Criar e postar arte da agenda semanal do bar no Instagram. (Recorrente: Segundas 18h)',
+                    status: 'todo',
+                    priority: 'urgent',
+                    category: 'bar',
+                    assignee: 'alphonse',
+                    executionLog: [],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                }
+            ];
+            this.saveTasks();
+        }
+
         this.errors = savedErrors ? JSON.parse(savedErrors) : [];
     }
     
@@ -41,7 +111,7 @@ class TaskBoard {
             status: 'backlog',
             priority: data.priority || 'medium',
             category: data.category || 'general',
-            assignee: data.assignee || 'alhonse',
+            assignee: data.assignee || 'alphonse',
             executionLog: [],
             errors: [],
             createdAt: new Date().toISOString(),
@@ -545,7 +615,7 @@ class TaskBoard {
     
     getAssigneeEmoji(assignee) {
         const emojis = {
-            alhonse: '🎩',
+            alphonse: '🎩',
             escobar: '👤',
             both: '👥'
         };
