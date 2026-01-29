@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_hunter',
+                    title: 'Criar Painel SaaS Hunter',
+                    description: 'Radar de ferramentas SaaS. Painel web para listar e cadastrar ferramentas manualmente (preparado para automação futura).',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando desenvolvimento do SaaS Hunter', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Concluído: Painel publicado em https://phescobbar.github.io/saas-hunter/', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_daily_routine',
                     title: 'Configurar Rotina Diária de Roteiros',
                     description: 'Agendar envio de 5 plots diários (20h) e preparar integração para salvar roteiros escolhidos direto no JSON do Story Lab.',
