@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_rewrite_heranca',
+                    title: 'Reescrever Roteiro: Herança do Cachorro (V2)',
+                    description: 'Ajustar para formato TTS (apenas narração), expandir para 2500 chars e remover descrições de cena. Foco na densidade narrativa.',
+                    status: 'progress',
+                    priority: 'urgent',
+                    category: 'stories',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando reescrita (Formato Narrativo TTS)', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Roteiro expandido e salvo no Story Lab', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_hub_navigation',
                     title: 'Criar Navegação Global no Rodapé',
                     description: 'Adicionar links elegantes para Story Lab e SaaS Hunter no rodapé do Task Board, criando um hub central.',
