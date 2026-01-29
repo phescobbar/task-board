@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Board | Gestão de Tarefas - Alhonse</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Ambient Background -->
+        <div class="ambient-bg">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+                    </svg>
+                </div>
+                <span class="logo-text">Task<span class="accent">Board</span></span>
+                <span class="logo-badge">by Alhonse 🎩</span>
+            </div>
+            <div class="header-actions">
+                <button class="btn-icon" id="toggleErrors" title="Painel de Erros">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span class="error-count" id="errorCount">0</span>
+                </button>
+                <button class="btn-icon" id="exportBtn" title="Exportar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                </button>
+                <button class="btn-icon" id="importBtn" title="Importar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="17 8 12 3 7 8"/>
+                        <line x1="12" y1="3" x2="12" y2="15"/>
+                    </svg>
+                </button>
+                <input type="file" id="importFile" accept=".json" style="display: none;">
+                <button class="btn-primary" id="newTaskBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Nova Tarefa
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main">
+            <!-- Kanban Board -->
+            <div class="kanban-board">
+                <!-- Backlog Column -->
+                <div class="kanban-column" data-status="backlog">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="column-icon">📋</span>
+                            <h2>Backlog</h2>
+                            <span class="task-count" data-count="backlog">0</span>
+                        </div>
+                    </div>
+                    <div class="column-body" data-status="backlog"></div>
+                </div>
+
+                <!-- To Do Column -->
+                <div class="kanban-column" data-status="todo">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="column-icon">🎯</span>
+                            <h2>A Fazer</h2>
+                            <span class="task-count" data-count="todo">0</span>
+                        </div>
+                    </div>
+                    <div class="column-body" data-status="todo"></div>
+                </div>
+
+                <!-- In Progress Column -->
+                <div class="kanban-column" data-status="progress">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="column-icon">⚡</span>
+                            <h2>Em Progresso</h2>
+                            <span class="task-count" data-count="progress">0</span>
+                        </div>
+                    </div>
+                    <div class="column-body" data-status="progress"></div>
+                </div>
+
+                <!-- Review Column -->
+                <div class="kanban-column" data-status="review">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="column-icon">👀</span>
+                            <h2>Em Revisão</h2>
+                            <span class="task-count" data-count="review">0</span>
+                        </div>
+                    </div>
+                    <div class="column-body" data-status="review"></div>
+                </div>
+
+                <!-- Done Column -->
+                <div class="kanban-column" data-status="done">
+                    <div class="column-header">
+                        <div class="column-title">
+                            <span class="column-icon">✅</span>
+                            <h2>Concluído</h2>
+                            <span class="task-count" data-count="done">0</span>
+                        </div>
+                    </div>
+                    <div class="column-body" data-status="done"></div>
+                </div>
+            </div>
+
+            <!-- Error Panel (Slide-out) -->
+            <aside class="error-panel" id="errorPanel">
+                <div class="error-panel-header">
+                    <h3>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="12"/>
+                            <line x1="12" y1="16" x2="12.01" y2="16"/>
+                        </svg>
+                        Registro de Erros
+                    </h3>
+                    <button class="btn-close" id="closeErrors">&times;</button>
+                </div>
+                <div class="error-panel-body" id="errorList">
+                    <div class="empty-errors">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                            <polyline points="22 4 12 14.01 9 11.01"/>
+                        </svg>
+                        <p>Nenhum erro registrado</p>
+                    </div>
+                </div>
+                <div class="error-panel-footer">
+                    <button class="btn-clear-errors" id="clearErrors">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="3 6 5 6 21 6"/>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                        </svg>
+                        Limpar Erros
+                    </button>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Task Modal -->
+        <div class="modal-overlay" id="taskModal">
+            <div class="modal">
+                <div class="modal-header">
+                    <h3 id="modalTitle">Nova Tarefa</h3>
+                    <button class="btn-close" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Título *</label>
+                        <input type="text" id="taskTitle" placeholder="Descreva a tarefa...">
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <textarea id="taskDescription" placeholder="Detalhes, contexto, requisitos..."></textarea>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Prioridade</label>
+                            <select id="taskPriority">
+                                <option value="low">🟢 Baixa</option>
+                                <option value="medium" selected>🟡 Média</option>
+                                <option value="high">🟠 Alta</option>
+                                <option value="urgent">🔴 Urgente</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Categoria</label>
+                            <select id="taskCategory">
+                                <option value="general">Geral</option>
+                                <option value="bar">🍺 Bar</option>
+                                <option value="stories">🎬 Stories</option>
+                                <option value="dev">💻 Dev</option>
+                                <option value="personal">👤 Pessoal</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Responsável</label>
+                        <select id="taskAssignee">
+                            <option value="alhonse">🎩 Alhonse</option>
+                            <option value="escobar">👤 Escobar</option>
+                            <option value="both">👥 Ambos</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Execution Log (visible when editing) -->
+                    <div class="form-group execution-log" id="executionLogGroup" style="display: none;">
+                        <label>Log de Execução</label>
+                        <div class="execution-entries" id="executionEntries"></div>
+                        <div class="add-log-entry">
+                            <input type="text" id="newLogEntry" placeholder="Adicionar entrada no log...">
+                            <button class="btn-add-log" id="addLogEntry">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Error Display (if task has errors) -->
+                    <div class="task-errors" id="taskErrors" style="display: none;">
+                        <label>⚠️ Erros desta Tarefa</label>
+                        <div class="task-error-list" id="taskErrorList"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn-secondary" id="cancelTask">Cancelar</button>
+                    <button class="btn-danger" id="deleteTask" style="display: none;">Excluir</button>
+                    <button class="btn-primary" id="saveTask">Salvar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toastContainer"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
