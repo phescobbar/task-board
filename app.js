@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_automation',
+                    title: 'Automatizar SaaS Hunter (20:45)',
+                    description: 'Migrar dados para JSON, implementar verificação de duplicatas e agendar pesquisa diária com briefing detalhado.',
+                    status: 'progress',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando migração de dados para saas.json', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Automação configurada: Cron (20:45) + JSON Storage + Briefing', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_plots_20260129',
                     title: 'Gerar Plots Diários (29/01)',
                     description: 'Gerar e enviar 5 plots virais via Telegram (Rotina 20h).',
