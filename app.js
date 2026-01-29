@@ -75,6 +75,23 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_search_first_saas',
+                    title: 'Pesquisar Primeiro SaaS (MVP)',
+                    description: 'Realizar busca de 1 SaaS com receita comprovada (>$5k MRR) usando a API do Brave e metodologia Hunter. Cadastrar no painel.',
+                    status: 'progress',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando tarefa (Correção: registro atrasado)', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Busca realizada: Bannerbear identificado ($50k MRR)', status: 'success', timestamp: new Date().toISOString() },
+                        { text: 'Cadastrado no SaaS Hunter via código inicial', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_methodology',
                     title: 'Implementar Metodologia SaaS Hunter',
                     description: 'Salvar metodologia de pesquisa e atualizar o painel SaaS Hunter para suportar campos detalhados (MRR, Stack, Análise).',
