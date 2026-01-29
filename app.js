@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_daily_routine',
+                    title: 'Configurar Rotina Diária de Roteiros',
+                    description: 'Agendar envio de 5 plots diários (20h) e preparar integração para salvar roteiros escolhidos direto no JSON do Story Lab.',
+                    status: 'progress',
+                    priority: 'high',
+                    category: 'stories',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Cron job story-plots-daily criado (20h)', status: 'success', timestamp: new Date().toISOString() },
+                        { text: 'Story Lab atualizado para ler stories.json', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_analyze_helena',
                     title: 'Analisar Padrões: Helena & Renato',
                     description: 'Decompor a história viral para identificar gatilhos de engajamento e estrutura narrativa.',
