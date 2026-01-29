@@ -75,6 +75,37 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_methodology',
+                    title: 'Implementar Metodologia SaaS Hunter',
+                    description: 'Salvar metodologia de pesquisa e atualizar o painel SaaS Hunter para suportar campos detalhados (MRR, Stack, Análise).',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando documentação da metodologia', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Concluído: Metodologia salva em METHODOLOGY.md e painel atualizado com novos campos.', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
+                    id: 'task_saas_hunter',
+                    title: 'Implementar Metodologia SaaS Hunter',
+                    description: 'Salvar metodologia de pesquisa e atualizar o painel SaaS Hunter para suportar campos detalhados (MRR, Stack, Análise).',
+                    status: 'progress',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando documentação da metodologia', status: 'start', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_hunter',
                     title: 'Criar Painel SaaS Hunter',
                     description: 'Radar de ferramentas SaaS. Painel web para listar e cadastrar ferramentas manualmente (preparado para automação futura).',
