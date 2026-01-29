@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_plots_20260129',
+                    title: 'Gerar Plots Diários (29/01)',
+                    description: 'Gerar e enviar 5 plots virais via Telegram (Rotina 20h).',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'stories',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando geração de plots', status: 'start', timestamp: new Date().toISOString() },
+                        { text: '5 plots gerados e enviados via Telegram', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_fix_ui',
                     title: 'Corrigir UI SaaS Hunter e Add Briefing',
                     description: 'Consertar modal quebrando o layout inicial e adicionar campo de texto longo (Briefing) com popup de leitura.',
