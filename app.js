@@ -75,6 +75,23 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_analyze_helena',
+                    title: 'Analisar Padrões: Helena & Renato',
+                    description: 'Decompor a história viral para identificar gatilhos de engajamento e estrutura narrativa.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'stories',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando análise do roteiro viral', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Padrões identificados: Gancho matemático, Vilão complexo, Dilema final', status: 'success', timestamp: new Date().toISOString() },
+                        { text: 'Relatório salvo em projects/story-panel/PATTERNS_HELENA.md', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_story_guide',
                     title: 'Documentar Guia de Storytelling',
                     description: 'Criar guia oficial de estrutura para roteiros (Hook, Foreshadow, But/Therefore) baseado no modelo do Escobar.',
@@ -107,7 +124,14 @@ class TaskBoard {
             this.saveTasks();
         }
 
-        this.errors = savedErrors ? JSON.parse(savedErrors) : [];
+        this.errors = savedErrors ? JSON.parse(savedErrors) : [
+            {
+                id: 'err_git_1',
+                taskTitle: 'Sync GitHub',
+                message: 'Erro de sintaxe no comando git commit (aspas não escapadas corretamente).',
+                timestamp: new Date().toISOString()
+            }
+        ];
     }
     
     saveTasks() {
