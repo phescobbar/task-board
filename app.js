@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_story_guide',
+                    title: 'Documentar Guia de Storytelling',
+                    description: 'Criar guia oficial de estrutura para roteiros (Hook, Foreshadow, But/Therefore) baseado no modelo do Escobar.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'stories',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando documentação da estrutura viral', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Concluído: Guia salvo em projects/story-panel/GUIDE.md', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_init_4',
                     title: 'Arte da Agenda Semanal',
                     description: 'Criar e postar arte da agenda semanal do bar no Instagram. (Recorrente: Segundas 18h)',
