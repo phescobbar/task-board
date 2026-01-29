@@ -75,6 +75,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_script_heranca',
+                    title: 'Roteiro: A Herança do Cachorro',
+                    description: 'Escrever roteiro completo baseado no Plot 2 (Ganância/Arrependimento). Salvar no Story Lab.',
+                    status: 'progress',
+                    priority: 'high',
+                    category: 'stories',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando escrita do roteiro', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'Roteiro criado e salvo no Story Lab', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_automation',
                     title: 'Automatizar SaaS Hunter (20:45)',
                     description: 'Migrar dados para JSON, implementar verificação de duplicatas e agendar pesquisa diária com briefing detalhado.',
