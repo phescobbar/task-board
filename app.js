@@ -75,6 +75,23 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_manual_fix_29jan',
+                    title: 'Executar SaaS Hunter Manualmente (Correção)',
+                    description: 'O cron disparou mas a execução falhou. Executar busca manual, salvar e notificar no Telegram.',
+                    status: 'progress',
+                    priority: 'urgent',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Iniciando execução manual de recuperação', status: 'start', timestamp: new Date().toISOString() },
+                        { text: 'SaaS encontrado: Photo AI ($132k MRR)', status: 'success', timestamp: new Date().toISOString() },
+                        { text: 'Cadastrado no saas.json com briefing detalhado', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_rewrite_heranca',
                     title: 'Reescrever Roteiro: Herança do Cachorro (V2)',
                     description: 'Ajustar para formato TTS (apenas narração), expandir para 2500 chars e remover descrições de cena. Foco na densidade narrativa.',
