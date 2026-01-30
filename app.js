@@ -93,6 +93,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_manual_exec_siteguru',
+                    title: 'Execução Manual SaaS Hunter: SiteGuru',
+                    description: 'Recuperação manual do cron das 08:30 (server off). SiteGuru ($14k MRR) cadastrado.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Busca manual realizada: SiteGuru encontrado', status: 'success', timestamp: new Date().toISOString() },
+                        { text: 'Cadastrado no saas.json', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_reschedule_server_off',
                     title: 'Reagendar SaaS Hunter (Servidor Off)',
                     description: 'Servidor estava desligado às 07:00. Reagendado para 08:30.',
