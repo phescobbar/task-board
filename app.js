@@ -75,6 +75,21 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_cron_reset',
+                    title: 'Resetar Automação SaaS (Teste Simples)',
+                    description: 'Remover crons complexos e criar teste simplificado (22:30): Busca -> Telegram.',
+                    status: 'done',
+                    priority: 'urgent',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Crons limpos e teste simples agendado para 22:30', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_cron_debug',
                     title: 'Debug Cron SaaS Hunter',
                     description: 'Ajustar cron para 21:30 com prompt imperativo para garantir execução das ferramentas.',
