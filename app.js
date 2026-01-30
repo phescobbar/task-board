@@ -109,6 +109,21 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_bot_ai_upgrade',
+                    title: 'Upgrade SaaS Bot com IA (Gemini CLI)',
+                    description: 'Melhorar hunter-bot.js para usar o gemini CLI local e analisar o conteúdo da página, gerando JSON estruturado automaticamente.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Script atualizado com integração Gemini CLI', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_manual_exec_siteguru',
                     title: 'Execução Manual SaaS Hunter: SiteGuru',
                     description: 'Recuperação manual do cron das 08:30 (server off). SiteGuru ($14k MRR) cadastrado.',
