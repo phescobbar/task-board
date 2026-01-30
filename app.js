@@ -93,6 +93,21 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_reschedule_server_off',
+                    title: 'Reagendar SaaS Hunter (Servidor Off)',
+                    description: 'Servidor estava desligado às 07:00. Reagendado para 08:30.',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Cron atualizado para 08:30', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_cron_reset',
                     title: 'Resetar Automação SaaS (Teste Simples)',
                     description: 'Remover crons complexos e criar teste simplificado (22:30): Busca -> Telegram.',
