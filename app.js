@@ -93,6 +93,22 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_bot_implementation',
+                    title: 'Implementar Hunter Bot Autônomo',
+                    description: 'Criar script Node.js independente (hunter-bot.js) que roda via cron do Linux, eliminando a dependência do agente "acordar".',
+                    status: 'done',
+                    priority: 'urgent',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Script criado em projects/saas-hunter/scripts/hunter-bot.js', status: 'success', timestamp: new Date().toISOString() },
+                        { text: 'Cron do Linux configurado para 07:00', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_manual_exec_siteguru',
                     title: 'Execução Manual SaaS Hunter: SiteGuru',
                     description: 'Recuperação manual do cron das 08:30 (server off). SiteGuru ($14k MRR) cadastrado.',
