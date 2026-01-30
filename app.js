@@ -75,6 +75,24 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_manual_exec_cuppa',
+                    title: 'Execução Manual SaaS Hunter: Cuppa AI',
+                    description: 'Cron das 22:45 falhou no wake. Execução manual identificou Cuppa AI ($59k MRR).',
+                    status: 'done',
+                    priority: 'high',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Busca manual realizada: Cuppa AI encontrado', status: 'success', timestamp: new Date().toISOString() },
+                        { text: 'Cadastrado no saas.json', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [
+                        { id: 'err_cron_wake', message: 'Cron com wakeMode:now não acordou o agente.', timestamp: new Date().toISOString() }
+                    ],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_cron_reset',
                     title: 'Resetar Automação SaaS (Teste Simples)',
                     description: 'Remover crons complexos e criar teste simplificado (22:30): Busca -> Telegram.',
