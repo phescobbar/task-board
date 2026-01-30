@@ -75,6 +75,21 @@ class TaskBoard {
                     updatedAt: new Date().toISOString()
                 },
                 {
+                    id: 'task_saas_cron_debug',
+                    title: 'Debug Cron SaaS Hunter',
+                    description: 'Ajustar cron para 21:30 com prompt imperativo para garantir execução das ferramentas.',
+                    status: 'progress',
+                    priority: 'urgent',
+                    category: 'dev',
+                    assignee: 'alphonse',
+                    executionLog: [
+                        { text: 'Cron atualizado para 21:30 com prompt "COMANDO PRIORITÁRIO"', status: 'success', timestamp: new Date().toISOString() }
+                    ],
+                    errors: [],
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                {
                     id: 'task_saas_manual_fix_29jan',
                     title: 'Executar SaaS Hunter Manualmente (Correção)',
                     description: 'O cron disparou mas a execução falhou. Executar busca manual, salvar e notificar no Telegram.',
