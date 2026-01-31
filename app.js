@@ -4,6 +4,7 @@ class TaskBoard {
     constructor() {
         this.tasks = [];
         this.errors = [];
+        this.crons = []; // New property for crons
         this.currentTaskId = null;
         
         this.init();
@@ -14,11 +15,13 @@ class TaskBoard {
         // Garantir que TursoDB existe
         if (window.TursoDB) {
             await this.loadData();
+            await this.loadCrons(); // Load crons on init
         } else {
             const checkDB = setInterval(async () => {
                 if (window.TursoDB) {
                     clearInterval(checkDB);
                     await this.loadData();
+                    await this.loadCrons();
                 }
             }, 100);
         }
@@ -68,6 +71,19 @@ class TaskBoard {
             this.render();
         } finally {
             this.showLoading(false);
+        }
+    }
+
+    // Load crons from the static file injected by Alphonse
+    async loadCrons() {
+        try {
+            const response = await fetch('crons.json');
+            if (response.ok) {
+                this.crons = await response.json();
+                this.renderCrons();
+            }
+        } catch (e) {
+            console.warn('Erro ao carregar crons.json:', e);
         }
     }
     
@@ -161,7 +177,7 @@ class TaskBoard {
         if (btn) btn.disabled = show;
     }
     
-    // ===== UI and Rendering (Mantidos do original com leves ajustes) =====
+    // ===== UI and Rendering =====
     bindEvents() {
         document.getElementById('newTaskBtn').addEventListener('click', () => this.openModal());
         document.getElementById('closeModal').addEventListener('click', () => this.closeModal());
@@ -210,7 +226,9 @@ class TaskBoard {
                 column.style.background = '';
                 const taskId = e.dataTransfer.getData('text/plain');
                 const newStatus = column.dataset.status;
-                await this.moveTask(taskId, newStatus);
+                if (newStatus !== 'crons') { // Crons are read-only
+                    await this.moveTask(taskId, newStatus);
+                }
             });
         });
     }
@@ -283,6 +301,7 @@ class TaskBoard {
         this.renderColumns();
         this.renderErrors();
         this.updateErrorCount();
+        this.renderCrons();
         this.bindDragEvents();
     }
     
@@ -299,6 +318,33 @@ class TaskBoard {
                 card.addEventListener('click', () => this.openModal(card.dataset.id));
             });
         });
+    }
+
+    renderCrons() {
+        const column = document.querySelector('.column-body[data-status="crons"]');
+        const countBadge = document.querySelector('[data-count="crons"]');
+        if (!column) return;
+        
+        if (countBadge) countBadge.textContent = this.crons.length;
+        
+        column.innerHTML = this.crons.map(cron => `
+            <div class="task-card cron-card">
+                <div class="task-card-header">
+                    <span class="task-title" style="color: var(--accent-primary)">⏰ ${cron.name}</span>
+                    <span class="task-priority high"></span>
+                </div>
+                <p class="task-description">${cron.schedule}</p>
+                <div class="task-meta">
+                    <span class="task-category">Sistema</span>
+                    <span class="task-assignee">⚙️</span>
+                </div>
+                <div class="task-log-preview">
+                    <div class="log-status success">
+                        ➡️ Próximo: ${cron.nextRun}
+                    </div>
+                </div>
+            </div>
+        `).join('');
     }
     
     renderTaskCard(task) {
@@ -408,9 +454,9 @@ class TaskBoard {
         const emojis = { alphonse: '🎩', escobar: '👤', both: '👥' };
         return emojis[a] || a; 
     }
-    getStatusIcon(s) {
+    getStatusIcon(status) {
         const icons = { start: '▶️', success: '✅', error: '❌', info: 'ℹ️' };
-        return icons[s] || '•';
+        return icons[status] || '•';
     }
     showToast(msg, type) { console.log(`Toast: ${msg} (${type})`); }
 }
