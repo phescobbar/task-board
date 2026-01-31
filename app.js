@@ -1,4 +1,4 @@
-// ===== Task Board - App Logic =====
+// ===== Task Board - App Logic (Turso DB Version) =====
 
 class TaskBoard {
     constructor() {
@@ -9,657 +9,212 @@ class TaskBoard {
         this.init();
     }
     
-    init() {
-        this.loadData();
+    async init() {
         this.bindEvents();
-        this.render();
+        // Garantir que TursoDB existe
+        if (window.TursoDB) {
+            await this.loadData();
+        } else {
+            const checkDB = setInterval(async () => {
+                if (window.TursoDB) {
+                    clearInterval(checkDB);
+                    await this.loadData();
+                }
+            }, 100);
+        }
         this.initDragAndDrop();
     }
     
     // ===== Storage =====
-    loadData() {
-        const savedTasks = localStorage.getItem('taskboard_tasks');
-        const savedErrors = localStorage.getItem('taskboard_errors');
-        
-        if (savedTasks) {
-            this.tasks = JSON.parse(savedTasks);
-        } else {
-            // Initial Data Population
-            this.tasks = [
-                {
-                    id: 'task_init_1',
-                    title: 'Configurar Clawdbot como Serviço',
-                    description: 'Configurar systemd para rodar o gateway em background e habilitar linger.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando configuração do systemd', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Concluído: Serviço ativo e rodando', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_init_2',
-                    title: 'Criar Story Lab',
-                    description: 'Desenvolver painel web para gestão de roteiros de Shorts/Reels com integração GitHub.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'stories',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando criação dos arquivos do projeto', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Concluído: Deploy no GitHub Pages realizado', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_init_3',
-                    title: 'Criar Task Board',
-                    description: 'Desenvolver painel Kanban para gestão de tarefas com log de execução e painel de erros.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando desenvolvimento do Kanban', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Concluído: Deploy no GitHub Pages realizado', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_manual_exec_cuppa',
-                    title: 'Execução Manual SaaS Hunter: Cuppa AI',
-                    description: 'Cron das 22:45 falhou no wake. Execução manual identificou Cuppa AI ($59k MRR).',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Busca manual realizada: Cuppa AI encontrado', status: 'success', timestamp: new Date().toISOString() },
-                        { text: 'Cadastrado no saas.json', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [
-                        { id: 'err_cron_wake', message: 'Cron com wakeMode:now não acordou o agente.', timestamp: new Date().toISOString() }
-                    ],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_bot_implementation',
-                    title: 'Implementar Hunter Bot Autônomo',
-                    description: 'Criar script Node.js independente (hunter-bot.js) que roda via cron do Linux, eliminando a dependência do agente "acordar".',
-                    status: 'done',
-                    priority: 'urgent',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Script criado em projects/saas-hunter/scripts/hunter-bot.js', status: 'success', timestamp: new Date().toISOString() },
-                        { text: 'Cron do Linux configurado para 07:00', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_bot_ai_upgrade',
-                    title: 'Upgrade SaaS Bot com IA (Gemini CLI)',
-                    description: 'Melhorar hunter-bot.js para usar o gemini CLI local e analisar o conteúdo da página, gerando JSON estruturado automaticamente.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Script atualizado com integração Gemini CLI', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_manual_exec_siteguru',
-                    title: 'Execução Manual SaaS Hunter: SiteGuru',
-                    description: 'Recuperação manual do cron das 08:30 (server off). SiteGuru ($14k MRR) cadastrado.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Busca manual realizada: SiteGuru encontrado', status: 'success', timestamp: new Date().toISOString() },
-                        { text: 'Cadastrado no saas.json', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_reschedule_server_off',
-                    title: 'Reagendar SaaS Hunter (Servidor Off)',
-                    description: 'Servidor estava desligado às 07:00. Reagendado para 08:30.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Cron atualizado para 08:30', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_cron_reset',
-                    title: 'Resetar Automação SaaS (Teste Simples)',
-                    description: 'Remover crons complexos e criar teste simplificado (22:30): Busca -> Telegram.',
-                    status: 'done',
-                    priority: 'urgent',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Crons limpos e teste simples agendado para 22:30', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_cron_debug',
-                    title: 'Debug Cron SaaS Hunter',
-                    description: 'Ajustar cron para 21:30 com prompt imperativo para garantir execução das ferramentas.',
-                    status: 'progress',
-                    priority: 'urgent',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Cron atualizado para 21:30 com prompt "COMANDO PRIORITÁRIO"', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_manual_fix_29jan',
-                    title: 'Executar SaaS Hunter Manualmente (Correção)',
-                    description: 'O cron disparou mas a execução falhou. Executar busca manual, salvar e notificar no Telegram.',
-                    status: 'progress',
-                    priority: 'urgent',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando execução manual de recuperação', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'SaaS encontrado: Photo AI ($132k MRR)', status: 'success', timestamp: new Date().toISOString() },
-                        { text: 'Cadastrado no saas.json com briefing detalhado', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_rewrite_heranca',
-                    title: 'Reescrever Roteiro: Herança do Cachorro (V2)',
-                    description: 'Ajustar para formato TTS (apenas narração), expandir para 2500 chars e remover descrições de cena. Foco na densidade narrativa.',
-                    status: 'progress',
-                    priority: 'urgent',
-                    category: 'stories',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando reescrita (Formato Narrativo TTS)', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Roteiro expandido e salvo no Story Lab', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_hub_navigation',
-                    title: 'Criar Navegação Global no Rodapé',
-                    description: 'Adicionar links elegantes para Story Lab e SaaS Hunter no rodapé do Task Board, criando um hub central.',
-                    status: 'progress',
-                    priority: 'medium',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando implementação do rodapé global', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Rodapé adicionado com links para Story Lab e SaaS Hunter', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_script_heranca',
-                    title: 'Roteiro: A Herança do Cachorro',
-                    description: 'Escrever roteiro completo baseado no Plot 2 (Ganância/Arrependimento). Salvar no Story Lab.',
-                    status: 'progress',
-                    priority: 'high',
-                    category: 'stories',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando escrita do roteiro', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Roteiro criado e salvo no Story Lab', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_automation',
-                    title: 'Automatizar SaaS Hunter (20:45)',
-                    description: 'Migrar dados para JSON, implementar verificação de duplicatas e agendar pesquisa diária com briefing detalhado.',
-                    status: 'progress',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando migração de dados para saas.json', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Automação configurada: Cron (20:45) + JSON Storage + Briefing', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_plots_20260129',
-                    title: 'Gerar Plots Diários (29/01)',
-                    description: 'Gerar e enviar 5 plots virais via Telegram (Rotina 20h).',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'stories',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando geração de plots', status: 'start', timestamp: new Date().toISOString() },
-                        { text: '5 plots gerados e enviados via Telegram', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_fix_ui',
-                    title: 'Corrigir UI SaaS Hunter e Add Briefing',
-                    description: 'Consertar modal quebrando o layout inicial e adicionar campo de texto longo (Briefing) com popup de leitura.',
-                    status: 'progress',
-                    priority: 'urgent',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando diagnóstico do CSS quebrado', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'CSS corrigido (Modal Overlay) e Briefing adicionado', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_search_first_saas',
-                    title: 'Pesquisar Primeiro SaaS (MVP)',
-                    description: 'Realizar busca de 1 SaaS com receita comprovada (>$5k MRR) usando a API do Brave e metodologia Hunter. Cadastrar no painel.',
-                    status: 'progress',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando tarefa (Correção: registro atrasado)', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Busca realizada: Bannerbear identificado ($50k MRR)', status: 'success', timestamp: new Date().toISOString() },
-                        { text: 'Cadastrado no SaaS Hunter via código inicial', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_methodology',
-                    title: 'Implementar Metodologia SaaS Hunter',
-                    description: 'Salvar metodologia de pesquisa e atualizar o painel SaaS Hunter para suportar campos detalhados (MRR, Stack, Análise).',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando documentação da metodologia', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Concluído: Metodologia salva em METHODOLOGY.md e painel atualizado com novos campos.', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_hunter',
-                    title: 'Implementar Metodologia SaaS Hunter',
-                    description: 'Salvar metodologia de pesquisa e atualizar o painel SaaS Hunter para suportar campos detalhados (MRR, Stack, Análise).',
-                    status: 'progress',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando documentação da metodologia', status: 'start', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_saas_hunter',
-                    title: 'Criar Painel SaaS Hunter',
-                    description: 'Radar de ferramentas SaaS. Painel web para listar e cadastrar ferramentas manualmente (preparado para automação futura).',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'dev',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando desenvolvimento do SaaS Hunter', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Concluído: Painel publicado em https://phescobbar.github.io/saas-hunter/', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_daily_routine',
-                    title: 'Configurar Rotina Diária de Roteiros',
-                    description: 'Agendar envio de 5 plots diários (20h) e preparar integração para salvar roteiros escolhidos direto no JSON do Story Lab.',
-                    status: 'progress',
-                    priority: 'high',
-                    category: 'stories',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Cron job story-plots-daily criado (20h)', status: 'success', timestamp: new Date().toISOString() },
-                        { text: 'Story Lab atualizado para ler stories.json', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_analyze_helena',
-                    title: 'Analisar Padrões: Helena & Renato',
-                    description: 'Decompor a história viral para identificar gatilhos de engajamento e estrutura narrativa.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'stories',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando análise do roteiro viral', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Padrões identificados: Gancho matemático, Vilão complexo, Dilema final', status: 'success', timestamp: new Date().toISOString() },
-                        { text: 'Relatório salvo em projects/story-panel/PATTERNS_HELENA.md', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_story_guide',
-                    title: 'Documentar Guia de Storytelling',
-                    description: 'Criar guia oficial de estrutura para roteiros (Hook, Foreshadow, But/Therefore) baseado no modelo do Escobar.',
-                    status: 'done',
-                    priority: 'high',
-                    category: 'stories',
-                    assignee: 'alphonse',
-                    executionLog: [
-                        { text: 'Iniciando documentação da estrutura viral', status: 'start', timestamp: new Date().toISOString() },
-                        { text: 'Concluído: Guia salvo em projects/story-panel/GUIDE.md', status: 'success', timestamp: new Date().toISOString() }
-                    ],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                },
-                {
-                    id: 'task_init_4',
-                    title: 'Arte da Agenda Semanal',
-                    description: 'Criar e postar arte da agenda semanal do bar no Instagram. (Recorrente: Segundas 18h)',
-                    status: 'todo',
-                    priority: 'urgent',
-                    category: 'bar',
-                    assignee: 'alphonse',
-                    executionLog: [],
-                    errors: [],
-                    createdAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString()
-                }
-            ];
-            this.saveTasks();
-        }
-
-        this.errors = savedErrors ? JSON.parse(savedErrors) : [
-            {
-                id: 'err_git_1',
-                taskTitle: 'Sync GitHub',
-                message: 'Erro de sintaxe no comando git commit (aspas não escapadas corretamente).',
-                timestamp: new Date().toISOString()
-            }
-        ];
-    }
-    
-    saveTasks() {
-        localStorage.setItem('taskboard_tasks', JSON.stringify(this.tasks));
-    }
-    
-    saveErrors() {
-        localStorage.setItem('taskboard_errors', JSON.stringify(this.errors));
-    }
-    
-    // ===== Task CRUD =====
-    createTask(data) {
-        const task = {
-            id: this.generateId(),
-            title: data.title || 'Nova Tarefa',
-            description: data.description || '',
-            status: 'backlog',
-            priority: data.priority || 'medium',
-            category: data.category || 'general',
-            assignee: data.assignee || 'alphonse',
-            executionLog: [],
-            errors: [],
-            createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
-        };
-        
-        this.tasks.unshift(task);
-        this.saveTasks();
-        return task;
-    }
-    
-    updateTask(id, updates) {
-        const index = this.tasks.findIndex(t => t.id === id);
-        if (index !== -1) {
-            this.tasks[index] = {
-                ...this.tasks[index],
-                ...updates,
-                updatedAt: new Date().toISOString()
-            };
-            this.saveTasks();
-            return this.tasks[index];
-        }
-        return null;
-    }
-    
-    deleteTask(id) {
-        if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
-            this.tasks = this.tasks.filter(t => t.id !== id);
-            this.saveTasks();
-            this.closeModal();
-            this.render();
-            this.showToast('Tarefa excluída', 'success');
-        }
-    }
-    
-    getTask(id) {
-        return this.tasks.find(t => t.id === id);
-    }
-    
-    moveTask(taskId, newStatus) {
-        const task = this.getTask(taskId);
-        if (task) {
-            task.status = newStatus;
-            task.updatedAt = new Date().toISOString();
-            this.saveTasks();
-            this.render();
-        }
-    }
-    
-    // ===== Execution Log =====
-    addLogEntry(taskId, text, status = 'info') {
-        const task = this.getTask(taskId);
-        if (task) {
-            task.executionLog.push({
-                id: this.generateId(),
-                text,
-                status,
-                timestamp: new Date().toISOString()
+    async loadData() {
+        this.showLoading(true);
+        try {
+            // Carregar Tarefas
+            const taskResult = await TursoDB.query('SELECT * FROM tasks ORDER BY createdAt DESC');
+            const taskCols = taskResult.cols.map(c => c.name);
+            const loadedTasks = taskResult.rows.map(row => {
+                const t = {};
+                row.forEach((cell, i) => { t[taskCols[i]] = cell.value; });
+                t.executionLog = [];
+                t.errors = [];
+                return t;
             });
-            task.updatedAt = new Date().toISOString();
-            this.saveTasks();
+
+            // Carregar Logs de Execução
+            const logResult = await TursoDB.query('SELECT * FROM task_logs ORDER BY timestamp ASC');
+            const logCols = logResult.cols.map(c => c.name);
+            logResult.rows.forEach(row => {
+                const log = {};
+                row.forEach((cell, i) => { log[logCols[i]] = cell.value; });
+                const task = loadedTasks.find(t => t.id === log.taskId);
+                if (task) task.executionLog.push(log);
+            });
+
+            // Carregar Erros Globais
+            const errorResult = await TursoDB.query('SELECT * FROM errors ORDER BY timestamp DESC');
+            const errCols = errorResult.cols.map(c => c.name);
+            this.errors = errorResult.rows.map(row => {
+                const err = {};
+                row.forEach((cell, i) => { err[errCols[i]] = cell.value; });
+                return err;
+            });
+
+            this.tasks = loadedTasks;
+            this.render();
+        } catch (e) {
+            console.error('Erro ao carregar do Turso:', e);
+            const savedTasks = localStorage.getItem('taskboard_tasks');
+            if (savedTasks) this.tasks = JSON.parse(savedTasks);
+            this.render();
+        } finally {
+            this.showLoading(false);
         }
     }
     
-    // Método para o Alhonse usar antes de executar
+    async saveTaskToDB(data) {
+        this.showLoading(true);
+        try {
+            const id = data.id || this.generateId();
+            const now = new Date().toISOString();
+            
+            await TursoDB.command(
+                'INSERT INTO tasks (id, title, description, status, priority, category, assignee, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                [id, data.title, data.description, data.status || 'backlog', data.priority, data.category, data.assignee, data.createdAt || now, now]
+            );
+            await this.loadData();
+        } catch (e) { console.error('Erro ao salvar tarefa:', e); }
+        finally { this.showLoading(false); }
+    }
+
+    async updateTaskInDB(id, updates) {
+        const task = this.getTask(id);
+        if (!task) return;
+        const merged = { ...task, ...updates, updatedAt: new Date().toISOString() };
+        
+        try {
+            await TursoDB.command(
+                'UPDATE tasks SET title=?, description=?, status=?, priority=?, category=?, assignee=?, updatedAt=? WHERE id=?',
+                [merged.title, merged.description, merged.status, merged.priority, merged.category, merged.assignee, merged.updatedAt, id]
+            );
+            // Update local state for UI feel
+            const idx = this.tasks.findIndex(t => t.id === id);
+            if (idx !== -1) this.tasks[idx] = merged;
+        } catch (e) { console.error('Erro ao atualizar tarefa:', e); }
+    }
+
+    async deleteTaskFromDB(id) {
+        if (!confirm('Tem certeza?')) return;
+        this.showLoading(true);
+        try {
+            await TursoDB.command('DELETE FROM tasks WHERE id = ?', [id]);
+            await this.loadData();
+            this.closeModal();
+        } catch (e) { console.error('Erro ao deletar:', e); }
+        finally { this.showLoading(false); }
+    }
+
+    // ===== Execution Log =====
+    async addLogEntry(taskId, text, status = 'info') {
+        const timestamp = new Date().toISOString();
+        try {
+            await TursoDB.command(
+                'INSERT INTO task_logs (taskId, text, status, timestamp) VALUES (?, ?, ?, ?)',
+                [taskId, text, status, timestamp]
+            );
+            const task = this.getTask(taskId);
+            if (task) task.executionLog.push({ taskId, text, status, timestamp });
+            this.render();
+        } catch (e) { console.error('Erro ao logar:', e); }
+    }
+    
     logTaskStart(taskId, action) {
         this.addLogEntry(taskId, `Iniciando: ${action}`, 'start');
         this.moveTask(taskId, 'progress');
     }
     
-    // Método para o Alhonse usar após executar com sucesso
     logTaskSuccess(taskId, result) {
         this.addLogEntry(taskId, `Concluído: ${result}`, 'success');
     }
     
-    // Método para o Alhonse usar quando ocorrer erro
-    logTaskError(taskId, errorMessage) {
+    async logTaskError(taskId, errorMessage) {
+        const task = this.getTask(taskId);
+        const timestamp = new Date().toISOString();
+        try {
+            await TursoDB.command('INSERT INTO errors (id, taskTitle, message, timestamp) VALUES (?, ?, ?, ?)',
+                [this.generateId(), task ? task.title : 'Global', errorMessage, timestamp]);
+            await this.addLogEntry(taskId, `Erro: ${errorMessage}`, 'error');
+            await this.loadData();
+        } catch (e) { console.error('Erro ao registrar erro:', e); }
+    }
+
+    async moveTask(taskId, newStatus) {
         const task = this.getTask(taskId);
         if (task) {
-            // Add to task errors
-            task.errors.push({
-                id: this.generateId(),
-                message: errorMessage,
-                timestamp: new Date().toISOString()
-            });
-            
-            // Add to execution log
-            this.addLogEntry(taskId, `Erro: ${errorMessage}`, 'error');
-            
-            // Add to global error panel
-            this.addError(task.title, errorMessage);
-            
-            this.saveTasks();
+            task.status = newStatus;
+            await this.updateTaskInDB(taskId, { status: newStatus });
             this.render();
         }
     }
-    
-    // ===== Error Management =====
-    addError(taskTitle, message) {
-        this.errors.unshift({
-            id: this.generateId(),
-            taskTitle,
-            message,
-            timestamp: new Date().toISOString()
-        });
-        this.saveErrors();
-        this.renderErrors();
-        this.updateErrorCount();
+
+    showLoading(show) {
+        const btn = document.getElementById('newTaskBtn');
+        if (btn) btn.disabled = show;
     }
     
-    clearErrors() {
-        if (confirm('Limpar todos os erros registrados?')) {
-            this.errors = [];
-            this.saveErrors();
-            this.renderErrors();
-            this.updateErrorCount();
-        }
-    }
-    
-    // ===== Event Binding =====
+    // ===== UI and Rendering (Mantidos do original com leves ajustes) =====
     bindEvents() {
-        // New Task
-        document.getElementById('newTaskBtn').addEventListener('click', () => {
-            this.openModal();
-        });
-        
-        // Modal
+        document.getElementById('newTaskBtn').addEventListener('click', () => this.openModal());
         document.getElementById('closeModal').addEventListener('click', () => this.closeModal());
         document.getElementById('cancelTask').addEventListener('click', () => this.closeModal());
         document.getElementById('saveTask').addEventListener('click', () => this.saveCurrentTask());
         document.getElementById('deleteTask').addEventListener('click', () => {
-            if (this.currentTaskId) this.deleteTask(this.currentTaskId);
+            if (this.currentTaskId) this.deleteTaskFromDB(this.currentTaskId);
         });
-        
-        // Click outside modal
-        document.getElementById('taskModal').addEventListener('click', (e) => {
-            if (e.target.id === 'taskModal') this.closeModal();
-        });
-        
-        // Log entry
+        document.getElementById('taskModal').addEventListener('click', (e) => { if (e.target.id === 'taskModal') this.closeModal(); });
         document.getElementById('addLogEntry').addEventListener('click', () => this.addManualLogEntry());
-        document.getElementById('newLogEntry').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.addManualLogEntry();
+        document.getElementById('newLogEntry').addEventListener('keypress', (e) => { if (e.key === 'Enter') this.addManualLogEntry(); });
+        document.getElementById('toggleErrors').addEventListener('click', () => document.getElementById('errorPanel').classList.toggle('open'));
+        document.getElementById('closeErrors').addEventListener('click', () => document.getElementById('errorPanel').classList.remove('open'));
+        document.getElementById('clearErrors').addEventListener('click', async () => {
+            if (confirm('Limpar erros?')) {
+                await TursoDB.command('DELETE FROM errors');
+                await this.loadData();
+            }
         });
-        
-        // Error panel
-        document.getElementById('toggleErrors').addEventListener('click', () => {
-            document.getElementById('errorPanel').classList.toggle('open');
-        });
-        document.getElementById('closeErrors').addEventListener('click', () => {
-            document.getElementById('errorPanel').classList.remove('open');
-        });
-        document.getElementById('clearErrors').addEventListener('click', () => this.clearErrors());
-        
-        // Export/Import
         document.getElementById('exportBtn').addEventListener('click', () => this.exportData());
-        document.getElementById('importBtn').addEventListener('click', () => {
-            document.getElementById('importFile').click();
-        });
+        document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
         document.getElementById('importFile').addEventListener('change', (e) => this.importData(e));
     }
     
-    // ===== Drag and Drop =====
-    initDragAndDrop() {
-        this.render(); // Ensures cards exist before binding
-    }
+    initDragAndDrop() { this.render(); }
     
     bindDragEvents() {
         const cards = document.querySelectorAll('.task-card');
         const columns = document.querySelectorAll('.column-body');
-        
         cards.forEach(card => {
             card.draggable = true;
-            
             card.addEventListener('dragstart', (e) => {
                 card.classList.add('dragging');
                 e.dataTransfer.setData('text/plain', card.dataset.id);
             });
-            
-            card.addEventListener('dragend', () => {
-                card.classList.remove('dragging');
-            });
+            card.addEventListener('dragend', () => card.classList.remove('dragging'));
         });
-        
         columns.forEach(column => {
             column.addEventListener('dragover', (e) => {
                 e.preventDefault();
                 column.style.background = 'rgba(16, 185, 129, 0.1)';
             });
-            
-            column.addEventListener('dragleave', () => {
-                column.style.background = '';
-            });
-            
-            column.addEventListener('drop', (e) => {
+            column.addEventListener('dragleave', () => column.style.background = '');
+            column.addEventListener('drop', async (e) => {
                 e.preventDefault();
                 column.style.background = '';
                 const taskId = e.dataTransfer.getData('text/plain');
                 const newStatus = column.dataset.status;
-                this.moveTask(taskId, newStatus);
+                await this.moveTask(taskId, newStatus);
             });
         });
     }
     
-    // ===== Modal =====
     openModal(taskId = null) {
         this.currentTaskId = taskId;
         const modal = document.getElementById('taskModal');
@@ -671,58 +226,34 @@ class TaskBoard {
         if (taskId) {
             const task = this.getTask(taskId);
             if (!task) return;
-            
             title.textContent = 'Editar Tarefa';
             deleteBtn.style.display = 'block';
             logGroup.style.display = 'block';
-            
-            // Populate fields
             document.getElementById('taskTitle').value = task.title;
-            document.getElementById('taskDescription').value = task.description;
+            document.getElementById('taskDescription').value = task.description || '';
             document.getElementById('taskPriority').value = task.priority;
             document.getElementById('taskCategory').value = task.category;
             document.getElementById('taskAssignee').value = task.assignee;
-            
-            // Render execution log
             this.renderExecutionLog(task);
-            
-            // Show errors if any
-            if (task.errors.length > 0) {
-                errorsGroup.style.display = 'block';
-                this.renderTaskErrors(task);
-            } else {
-                errorsGroup.style.display = 'none';
-            }
         } else {
             title.textContent = 'Nova Tarefa';
             deleteBtn.style.display = 'none';
             logGroup.style.display = 'none';
             errorsGroup.style.display = 'none';
-            
-            // Clear fields
             document.getElementById('taskTitle').value = '';
             document.getElementById('taskDescription').value = '';
             document.getElementById('taskPriority').value = 'medium';
             document.getElementById('taskCategory').value = 'general';
-            document.getElementById('taskAssignee').value = 'alhonse';
+            document.getElementById('taskAssignee').value = 'alphonse';
         }
-        
         modal.classList.add('open');
-        document.getElementById('taskTitle').focus();
     }
     
-    closeModal() {
-        document.getElementById('taskModal').classList.remove('open');
-        this.currentTaskId = null;
-    }
+    closeModal() { document.getElementById('taskModal').classList.remove('open'); this.currentTaskId = null; }
     
-    saveCurrentTask() {
+    async saveCurrentTask() {
         const title = document.getElementById('taskTitle').value.trim();
-        if (!title) {
-            this.showToast('O título é obrigatório', 'error');
-            return;
-        }
-        
+        if (!title) return;
         const data = {
             title,
             description: document.getElementById('taskDescription').value,
@@ -730,33 +261,24 @@ class TaskBoard {
             category: document.getElementById('taskCategory').value,
             assignee: document.getElementById('taskAssignee').value
         };
-        
         if (this.currentTaskId) {
-            this.updateTask(this.currentTaskId, data);
-            this.showToast('Tarefa atualizada!', 'success');
+            await this.updateTaskInDB(this.currentTaskId, data);
         } else {
-            this.createTask(data);
-            this.showToast('Tarefa criada!', 'success');
+            await this.saveTaskToDB(data);
         }
-        
         this.closeModal();
         this.render();
     }
     
-    addManualLogEntry() {
+    async addManualLogEntry() {
         const input = document.getElementById('newLogEntry');
         const text = input.value.trim();
-        
         if (!text || !this.currentTaskId) return;
-        
-        this.addLogEntry(this.currentTaskId, text, 'info');
+        await this.addLogEntry(this.currentTaskId, text, 'info');
         input.value = '';
-        
-        const task = this.getTask(this.currentTaskId);
-        if (task) this.renderExecutionLog(task);
+        this.renderExecutionLog(this.getTask(this.currentTaskId));
     }
     
-    // ===== Rendering =====
     render() {
         this.renderColumns();
         this.renderErrors();
@@ -766,32 +288,23 @@ class TaskBoard {
     
     renderColumns() {
         const statuses = ['backlog', 'todo', 'progress', 'review', 'done'];
-        
         statuses.forEach(status => {
             const column = document.querySelector(`.column-body[data-status="${status}"]`);
+            if (!column) return;
             const tasks = this.tasks.filter(t => t.status === status);
             const countBadge = document.querySelector(`[data-count="${status}"]`);
-            
             if (countBadge) countBadge.textContent = tasks.length;
-            
             column.innerHTML = tasks.map(task => this.renderTaskCard(task)).join('');
-            
-            // Bind click events
             column.querySelectorAll('.task-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    this.openModal(card.dataset.id);
-                });
+                card.addEventListener('click', () => this.openModal(card.dataset.id));
             });
         });
     }
     
     renderTaskCard(task) {
         const lastLog = task.executionLog[task.executionLog.length - 1];
-        const hasErrors = task.errors.length > 0;
-        
         return `
             <div class="task-card" data-id="${task.id}">
-                ${hasErrors ? `<span class="task-error-indicator">!</span>` : ''}
                 <div class="task-card-header">
                     <span class="task-title">${task.title}</span>
                     <span class="task-priority ${task.priority}"></span>
@@ -814,12 +327,11 @@ class TaskBoard {
     
     renderExecutionLog(task) {
         const container = document.getElementById('executionEntries');
-        
+        if (!container) return;
         if (task.executionLog.length === 0) {
             container.innerHTML = '<p style="color: var(--text-muted); font-size: 0.8rem;">Nenhuma entrada no log</p>';
             return;
         }
-        
         container.innerHTML = task.executionLog.map(entry => `
             <div class="log-entry">
                 <span class="log-time">${this.formatTime(entry.timestamp)}</span>
@@ -827,36 +339,16 @@ class TaskBoard {
                 <span class="log-text">${entry.text}</span>
             </div>
         `).join('');
-        
         container.scrollTop = container.scrollHeight;
-    }
-    
-    renderTaskErrors(task) {
-        const container = document.getElementById('taskErrorList');
-        container.innerHTML = task.errors.map(err => `
-            <div class="task-error-item">
-                <span>${err.message}</span>
-                <span style="color: var(--text-muted); font-size: 0.7rem;">${this.formatTime(err.timestamp)}</span>
-            </div>
-        `).join('');
     }
     
     renderErrors() {
         const container = document.getElementById('errorList');
-        
+        if (!container) return;
         if (this.errors.length === 0) {
-            container.innerHTML = `
-                <div class="empty-errors">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                    <p>Nenhum erro registrado</p>
-                </div>
-            `;
+            container.innerHTML = `<div class="empty-errors"><p>Nenhum erro registrado</p></div>`;
             return;
         }
-        
         container.innerHTML = this.errors.map(err => `
             <div class="error-item">
                 <div class="error-item-header">
@@ -869,170 +361,66 @@ class TaskBoard {
     }
     
     updateErrorCount() {
-        const count = this.errors.length;
         const badge = document.getElementById('errorCount');
-        badge.textContent = count;
-        badge.dataset.count = count;
+        if (badge) badge.textContent = this.errors.length;
     }
     
-    // ===== Export/Import =====
     exportData() {
-        const data = {
-            tasks: this.tasks,
-            errors: this.errors,
-            exportedAt: new Date().toISOString()
-        };
-        
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const data = JSON.stringify({ tasks: this.tasks, errors: this.errors }, null, 2);
+        const blob = new Blob([data], { type: 'application/json' });
         const url = URL.createObjectURL(blob);
-        
         const a = document.createElement('a');
         a.href = url;
-        a.download = `taskboard-backup-${new Date().toISOString().split('T')[0]}.json`;
+        a.download = `taskboard-backup.json`;
         a.click();
-        
-        URL.revokeObjectURL(url);
-        this.showToast('Dados exportados!', 'success');
     }
     
     importData(event) {
         const file = event.target.files[0];
         if (!file) return;
-        
         const reader = new FileReader();
-        reader.onload = (e) => {
+        reader.onload = async (e) => {
             try {
                 const data = JSON.parse(e.target.result);
                 if (data.tasks) {
-                    this.tasks = [...data.tasks, ...this.tasks];
-                    this.saveTasks();
+                    for (const t of data.tasks) {
+                        await this.saveTaskToDB(t);
+                        for (const log of (t.executionLog || [])) {
+                            await this.addLogEntry(t.id, log.text, log.status);
+                        }
+                    }
                 }
-                if (data.errors) {
-                    this.errors = [...data.errors, ...this.errors];
-                    this.saveErrors();
-                }
-                this.render();
-                this.showToast('Dados importados!', 'success');
-            } catch (err) {
-                this.showToast('Erro ao importar arquivo', 'error');
-            }
+                await this.loadData();
+            } catch (err) { console.error('Erro importação:', err); }
         };
         reader.readAsText(file);
-        event.target.value = '';
     }
     
-    // ===== Utilities =====
-    generateId() {
-        return 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    generateId() { return 'task_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); }
+    formatTime(iso) { return new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }); }
+    formatDateTime(iso) { return new Date(iso).toLocaleString('pt-BR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }); }
+    truncate(str, len) { return str.length > len ? str.substring(0, len) + '...' : str; }
+    getCategoryLabel(c) { 
+        const labels = { general: 'Geral', bar: '🍺 Bar', stories: '🎬 Stories', dev: '💻 Dev', personal: '👤 Pessoal' };
+        return labels[c] || c; 
     }
-    
-    formatTime(isoString) {
-        const date = new Date(isoString);
-        return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    getAssigneeEmoji(a) { 
+        const emojis = { alphonse: '🎩', escobar: '👤', both: '👥' };
+        return emojis[a] || a; 
     }
-    
-    formatDateTime(isoString) {
-        const date = new Date(isoString);
-        return date.toLocaleString('pt-BR', {
-            day: '2-digit',
-            month: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit'
-        });
+    getStatusIcon(s) {
+        const icons = { start: '▶️', success: '✅', error: '❌', info: 'ℹ️' };
+        return icons[s] || '•';
     }
-    
-    truncate(str, len) {
-        return str.length > len ? str.substring(0, len) + '...' : str;
-    }
-    
-    getCategoryLabel(category) {
-        const labels = {
-            general: 'Geral',
-            bar: '🍺 Bar',
-            stories: '🎬 Stories',
-            dev: '💻 Dev',
-            personal: '👤 Pessoal'
-        };
-        return labels[category] || category;
-    }
-    
-    getAssigneeEmoji(assignee) {
-        const emojis = {
-            alphonse: '🎩',
-            escobar: '👤',
-            both: '👥'
-        };
-        return emojis[assignee] || assignee;
-    }
-    
-    getStatusIcon(status) {
-        const icons = {
-            start: '▶️',
-            success: '✅',
-            error: '❌',
-            info: 'ℹ️'
-        };
-        return icons[status] || '•';
-    }
-    
-    showToast(message, type = 'success') {
-        const container = document.getElementById('toastContainer');
-        const toast = document.createElement('div');
-        toast.className = `toast ${type}`;
-        toast.innerHTML = `<span>${message}</span>`;
-        container.appendChild(toast);
-        
-        setTimeout(() => {
-            toast.style.animation = 'slideIn 0.3s ease reverse';
-            setTimeout(() => toast.remove(), 300);
-        }, 3000);
-    }
+    showToast(msg, type) { console.log(`Toast: ${msg} (${type})`); }
 }
 
-// ===== Global API for Alhonse =====
-// These methods can be called programmatically
-
 window.TaskBoardAPI = {
-    // Get board instance
-    getBoard: () => window.taskBoard,
-    
-    // Create a task and return its ID
-    createTask: (title, description = '', category = 'general', priority = 'medium') => {
-        const task = window.taskBoard.createTask({ title, description, category, priority });
-        window.taskBoard.render();
-        return task.id;
-    },
-    
-    // Log that a task is starting
-    startTask: (taskId, action) => {
-        window.taskBoard.logTaskStart(taskId, action);
-        window.taskBoard.render();
-    },
-    
-    // Log successful completion
-    completeTask: (taskId, result) => {
-        window.taskBoard.logTaskSuccess(taskId, result);
-        window.taskBoard.render();
-    },
-    
-    // Log an error
-    logError: (taskId, errorMessage) => {
-        window.taskBoard.logTaskError(taskId, errorMessage);
-    },
-    
-    // Move task to a specific status
-    moveTask: (taskId, status) => {
-        window.taskBoard.moveTask(taskId, status);
-    },
-    
-    // Get all tasks
-    getTasks: () => window.taskBoard.tasks,
-    
-    // Get all errors
-    getErrors: () => window.taskBoard.errors
+    createTask: (title, desc, cat, prio) => window.taskBoard.saveTaskToDB({ title, description: desc, category: cat, priority: prio }),
+    startTask: (id, action) => window.taskBoard.logTaskStart(id, action),
+    completeTask: (id, res) => window.taskBoard.logTaskSuccess(id, res),
+    logError: (id, err) => window.taskBoard.logTaskError(id, err),
+    moveTask: (id, status) => window.taskBoard.moveTask(id, status)
 };
 
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    window.taskBoard = new TaskBoard();
-});
+document.addEventListener('DOMContentLoaded', () => { window.taskBoard = new TaskBoard(); });
