@@ -1,0 +1,37 @@
+[
+  {
+    "name": "🎬 Story Plots Daily",
+    "schedule": "Todos os dias às 20:00",
+    "nextRun": "31/01, 20:00"
+  },
+  {
+    "name": "🔍 SaaS Hunter Daily",
+    "schedule": "Todos os dias às 10:15",
+    "nextRun": "01/02, 10:15"
+  },
+  {
+    "name": "⚽ Agenda Futebol Semanal",
+    "schedule": "Segundas às 11:35",
+    "nextRun": "02/02, 11:35"
+  },
+  {
+    "name": "🎨 Agenda Bar Semanal",
+    "schedule": "Segundas às 18:00",
+    "nextRun": "02/02, 18:00"
+  },
+  {
+    "name": "⚽ Alerta 8h: Inter x Flamengo",
+    "schedule": "04/02 às 11:00",
+    "nextRun": "04/02, 11:00"
+  },
+  {
+    "name": "⚽ Alerta 8h: Grêmio x Botafogo",
+    "schedule": "04/02 às 13:30",
+    "nextRun": "04/02, 13:30"
+  },
+  {
+    "name": "⚽ Alerta 30min: Brasileirão",
+    "schedule": "04/02 às 18:30",
+    "nextRun": "04/02, 18:30"
+  }
+]
